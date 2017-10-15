@@ -26,11 +26,16 @@ print(to_List)
 
 with open('Configuration.json') as json_data:
 		data = json.load(json_data)
-print (data['host'])
-print (data['port'])
+
 email_conn = smtplib.SMTP(data['host'], data['port'])
 email_conn.ehlo()
 email_conn.starttls()
-email_conn.login(data['userName'], data['password'])
-email_conn.sendmail(data['userName'], to_List, 'MessageBody Example.')
+try:
+	email_conn.login(data['userName'], data['password'])
+	email_conn.sendmail(data['userName'], to_List, 'MessageBody Example.')
+except SMTPAuthenticationError:
+		print('Error Occured while Login')
+except:
+		print('Error Occured')
+		
 email_conn.quit()
